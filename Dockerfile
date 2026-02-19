@@ -19,7 +19,6 @@ RUN touch /folder1/folder2/folder3/folder4/folder5/folder6/folder7/folder7.txt
 # Directorio donde vivirá tu shell
 WORKDIR /app
 
-
 COPY Jsh.java .
 
 RUN javac Jsh.java

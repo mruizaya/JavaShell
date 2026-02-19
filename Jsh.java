@@ -4,6 +4,7 @@ import java.util.*;
 public class Jsh {
 
     private static File currentDirectory = new File("/");
+    private static final Set<String> ROOT_VISIBLE = new HashSet<>(Arrays.asList("folder1"));
     private static final Scanner sc = new Scanner(System.in);
     private static final List<String> history = new ArrayList<>();
     private static int jobCounter = 1;
@@ -150,6 +151,10 @@ public class Jsh {
 
         if (cmd.equals("pwd")) {
             System.out.println(currentDirectory.getAbsolutePath());
+            return;
+        }
+        if (cmd.equals("ls")) {
+            listDirectory();
             return;
         }
         if (cmd.equals("cd")) {
@@ -314,6 +319,25 @@ public class Jsh {
         for (String entry : history) {
             System.out.println(index + " " + entry);
             index++;
+        }
+    }
+
+    private static void listDirectory() {
+        File[] entries = currentDirectory.listFiles();
+        if (entries == null) {
+            System.out.println("Error: no se puede listar el directorio");
+            return;
+        }
+
+        Arrays.sort(entries, Comparator.comparing(File::getName));
+        boolean isRoot = currentDirectory.getAbsolutePath().equals("/");
+
+        for (File entry : entries) {
+            String name = entry.getName();
+            if (isRoot && !ROOT_VISIBLE.contains(name)) {
+                continue;
+            }
+            System.out.println(name);
         }
     }
 
